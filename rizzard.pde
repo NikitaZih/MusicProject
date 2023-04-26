@@ -1,21 +1,47 @@
+import ddf.minim.analysis.*;
+import ddf.minim.*;
+AudioPlayer player;
+Minim minim;
+AudioPlayer jingle;
+AudioInput input;
+FFT fft;
+int[][] colo=new int[300][3];
+
 void setup()
 {
   size(600,600);
+  minim = new Minim(this);
+ 
+ 
+  input = minim.getLineIn();
+ 
+  fft = new FFT(input.bufferSize(), input.sampleRate());
+ 
+ 
+  player = minim.loadFile("twistard.mp3", 2048);
+   player.play();
 }
-
+ 
 
 
 void draw()
 {
   background(155, 155, 155);
   DrawWizard();
+  fft.forward(input.mix);
+
+  for(int i = 0; i < player.bufferSize()-1; i++)
+  {
+ 
+ ellipse(450,450, 250,player.left.get(i) *220);
+ fill(random(122),random(123),random(322));
+}
 }
 
 void DrawWizard()
 {
   //orb
-    circle(464,470,250);
-  ellipse(470,367,45,20);
+  
   //general outline and clothes outline
   line(5,276,51,244);
   line(51,244,58,222);
