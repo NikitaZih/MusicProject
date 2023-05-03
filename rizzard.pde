@@ -10,6 +10,7 @@ int[][] colo=new int[300][3];
 void setup()
 {
   size(600,600);
+  frameRate(60);
   minim = new Minim(this);
  
  
@@ -35,6 +36,7 @@ void draw()
  
  ellipse(450,450, 250,player.left.get(i) *220);
  fill(random(122),random(123),random(322));
+ ellipse(450,450, 50,player.left.get(i) *150);
 }
 }
 
