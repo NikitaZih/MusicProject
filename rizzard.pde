@@ -1,43 +1,55 @@
 import ddf.minim.analysis.*;
 import ddf.minim.*;
+
+
 AudioPlayer player;
 Minim minim;
-AudioPlayer jingle;
 AudioInput input;
 FFT fft;
+BeatDetect beat;
+
+float eRadius;
 int[][] colo=new int[300][3];
 
 void setup()
 {
   size(600,600);
   frameRate(60);
+  colorMode(HSB);
+  
+  beat = new BeatDetect();
   minim = new Minim(this);
- 
- 
   input = minim.getLineIn();
- 
   fft = new FFT(input.bufferSize(), input.sampleRate());
- 
- 
+  
+  eRadius = 200;
   player = minim.loadFile("twistard.mp3", 2048);
-   player.play();
+  player.play();
 }
  
 
 
 void draw()
 {
-  background(155, 155, 155);
+  background(25, 30, 255);
+  beat.detect(player.mix);
+  strokeWeight(3);
   DrawWizard();
   fft.forward(input.mix);
-
+  float a = map(eRadius, 200, 300, 60, 255);
+  
+  fill(150, 255, 150, a);
+  if ( beat.isOnset() ) eRadius = 300;
+  ellipse(450, 450, eRadius, eRadius);
+  eRadius *= 0.95;
+  if ( eRadius < 200 ) eRadius = 200;
+  
+  strokeWeight(0);
   for(int i = 0; i < player.bufferSize()-1; i++)
   {
- 
- ellipse(450,450, 250,player.left.get(i) *220);
- fill(random(122),random(123),random(322));
- ellipse(450,450, 50,player.left.get(i) *150);
-}
+     fill(random(255),155,155);
+     ellipse(450,450, 50,player.left.get(i) *150);
+  }
 }
 
 void DrawWizard()
